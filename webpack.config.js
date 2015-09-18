@@ -8,9 +8,10 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
     context: __dirname + '/public/jsx',
-    entry: [
-        './main.jsx'
-    ],
+    entry: {
+        main: './main.jsx',
+        login: './login.jsx'
+    },
     output: {
         path: __dirname + '/public/js/build',
         publicPath: '/js/build',
@@ -40,5 +41,6 @@ module.exports = {
     plugins: [
         definePlugin,
         new webpack.optimize.CommonsChunkPlugin('common.js')
-    ]
+    ],
+    devtool: "source-map"
 }

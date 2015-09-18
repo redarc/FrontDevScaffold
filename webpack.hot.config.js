@@ -2,11 +2,18 @@ var webpack = require("webpack");
 var path = require("path");
 
 module.exports = {
-    entry: [
+    entry: {
+      main: [
       'webpack-dev-server/client?http://localhost:8080', // WebpackDevServer host and port
       'webpack/hot/dev-server', // "only" prevents reload on syntax errors
       './public/jsx/main.jsx' // Your appʼs entry point
-    ],
+      ],
+      login: [
+      'webpack-dev-server/client?http://localhost:8080', // WebpackDevServer host and port
+      'webpack/hot/dev-server', // "only" prevents reload on syntax errors
+      './public/jsx/login.jsx' // Your appʼs entry point
+      ]
+    },
     output: {
         path: path.resolve(__dirname,'/public/js/build/'),
         publicPath: 'http://localhost:8080/js/build/',
@@ -37,12 +44,6 @@ module.exports = {
     plugins: [
         new webpack.optimize.CommonsChunkPlugin('common.js'),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        }),
-        new webpack.SourceMapDevToolPlugin()
+        new webpack.NoErrorsPlugin()
     ]
 }
