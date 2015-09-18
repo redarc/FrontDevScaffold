@@ -1,25 +1,22 @@
 var webpack = require("webpack");
 var path = require("path");
 
-var definePlugin = new webpack.DefinePlugin({
-    __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-    __PRERELEASE__: JSON.stringify(JSON.parse(process.env.BUILD_PRERELEASE || 'false'))
-});
-
 module.exports = {
-    context: __dirname + '/public/jsx',
     entry: [
-        './main.jsx'
+      'webpack-dev-server/client?http://localhost:8080', // WebpackDevServer host and port
+      'webpack/hot/dev-server', // "only" prevents reload on syntax errors
+      './public/jsx/main.jsx' // Your appʼs entry point
     ],
     output: {
-        path: __dirname + '/public/js/build',
-        publicPath: '/js/build',
+        path: path.resolve(__dirname,'/public/js/build/'),
+        publicPath: 'http://localhost:8080/js/build/',
         filename: '[name].js',
         sourceMapFilename: '[file].map'
     },
     module: {
         loaders: [{
             test: /\.js$/,
+            exclude: path.resolve(__dirname, "node_modules"),
             loader: 'babel-loader',
         }, {
             test: /\.css$/,
@@ -29,18 +26,23 @@ module.exports = {
             loader: 'url-loader?limit=8192'
         }, {
             test: /\.jsx$/,
-            exclude: /node_modules/,
+            exclude: path.resolve(__dirname, "node_modules"),
             loaders: ['react-hot', 'babel']
         }]
     },
+
     resolve: {
         extensions: ['', '.js', '.json', '.jsx']
     },
     plugins: [
-        definePlugin,
         new webpack.optimize.CommonsChunkPlugin('common.js'),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
-    ],
-
+        new webpack.NoErrorsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }),
+        new webpack.SourceMapDevToolPlugin()
+    ]
 }

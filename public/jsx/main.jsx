@@ -9,7 +9,7 @@ var RTitle = React.createClass({
       return item*3;
     });
     return (
-        <p>Hi I'm www button. {c} {require("./content.js")}</p>
+        <p>Hi I'm www button. hi Test {c} {require("./content.js")}</p>
       );
   }
 })

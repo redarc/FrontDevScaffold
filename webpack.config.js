@@ -7,21 +7,20 @@ var definePlugin = new webpack.DefinePlugin({
 });
 
 module.exports = {
+    context: __dirname + '/public/jsx',
     entry: [
-      'webpack-dev-server/client?http://localhost:3000', // WebpackDevServer host and port
-      'webpack/hot/dev-server', // "only" prevents reload on syntax errors
-      './public/jsx/main.jsx' // Your appʼs entry point
+        './main.jsx'
     ],
     output: {
-        path: path.resolve(__dirname,'/public/js/build/'),
-        publicPath: 'http://localhost:3000/js/build/',
+        path: __dirname + '/public/js/build',
+        publicPath: '/js/build',
         filename: '[name].js',
-        sourceMapFilename: '[file].map'
+        sourceMapFilename: '[file].map',
+        chunkFilename: '[chunkhash].bundle.js'
     },
     module: {
         loaders: [{
             test: /\.js$/,
-            exclude: path.resolve(__dirname, "node_modules"),
             loader: 'babel-loader',
         }, {
             test: /\.css$/,
@@ -31,19 +30,15 @@ module.exports = {
             loader: 'url-loader?limit=8192'
         }, {
             test: /\.jsx$/,
-            exclude: path.resolve(__dirname, "node_modules"),
+            exclude: /node_modules/,
             loaders: ['react-hot', 'babel']
         }]
     },
-
     resolve: {
         extensions: ['', '.js', '.json', '.jsx']
     },
     plugins: [
         definePlugin,
-        new webpack.optimize.CommonsChunkPlugin('common.js'),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
-    ],
-
+        new webpack.optimize.CommonsChunkPlugin('common.js')
+    ]
 }
